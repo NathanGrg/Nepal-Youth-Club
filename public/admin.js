@@ -1,5 +1,6 @@
 let token = localStorage.getItem('nyc_admin_token');
 let editingEventId = null;
+let requestsIntervalId = null;
 
 const loginPanel = document.getElementById('loginPanel');
 const dashboard = document.getElementById('dashboard');
@@ -11,15 +12,29 @@ function showDashboard() {
   logoutBtn.style.display = 'inline-block';
   loadEvents();
   loadRequests();
+  // start polling for new requests every 10s
+  if (!requestsIntervalId) requestsIntervalId = setInterval(loadRequests, 10000);
 }
 
 function showLogin() {
   loginPanel.style.display = 'block';
   dashboard.style.display = 'none';
   logoutBtn.style.display = 'none';
+  // stop polling when logged out
+  if (requestsIntervalId) { clearInterval(requestsIntervalId); requestsIntervalId = null; }
 }
 
 if (token) showDashboard(); else showLogin();
+
+// Listen for notifications from other tabs (e.g. when a new trial request is submitted)
+if ('BroadcastChannel' in window) {
+  const bc = new BroadcastChannel('nyc_channel');
+  bc.addEventListener('message', (ev) => {
+    if (ev.data && ev.data.type === 'new-trial-request') loadRequests();
+  });
+} else {
+  window.addEventListener('nyc:new-trial-request', loadRequests);
+}
 
 // ---------- Login / logout ----------
 document.getElementById('loginForm').addEventListener('submit', async (e) => {

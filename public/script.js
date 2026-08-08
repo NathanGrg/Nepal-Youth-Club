@@ -7,10 +7,43 @@ navToggle.addEventListener('click', () => {
 });
 
 const form = document.getElementById('recruitForm');
-form.addEventListener('submit', (e) => {
+const recruitNote = form.querySelector('.form-note') || document.getElementById('recruitNote');
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  form.querySelector('.form-note').textContent =
-    'Got it — thanks! (Mock submission, no data is actually sent yet.)';
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  if (recruitNote) recruitNote.textContent = '';
+
+  const payload = {
+    name: form.name.value,
+    position: form.position.value,
+    contact: form.contact.value
+  };
+
+  try {
+    const res = await fetch('/api/trial-requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Network response was not ok');
+    if (recruitNote) recruitNote.textContent = "Your request has been submitted. We'll be in touch.";
+    form.reset();
+
+    // Notify other tabs (admin) that a new request was created
+    if ('BroadcastChannel' in window) {
+      const bc = new BroadcastChannel('nyc_channel');
+      bc.postMessage({ type: 'new-trial-request' });
+      bc.close();
+    } else {
+      window.dispatchEvent(new CustomEvent('nyc:new-trial-request'));
+    }
+  } catch (err) {
+    console.error('Failed to submit trial request', err);
+    if (recruitNote) recruitNote.textContent = 'Failed to submit request. Please try again later.';
+  } finally {
+    submitBtn.disabled = false;
+  }
 });
 
 /* Carousel autoplay + controls */
