@@ -445,14 +445,34 @@ a { color: inherit; }
 .carousel-dots button.is-active { background: var(--orange); }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .hero { padding: 4rem 0 3rem; }
+  .hero-actions { gap: 0.75rem; }
+  .stat-strip { gap: 1rem; }
+}
+
 @media (max-width: 860px) {
   .recruit-inner { grid-template-columns: 1fr; }
+  .event-card { flex-direction: column; }
+  .event-card:hover { transform: none; box-shadow: none; }
+  .event-date { width: auto; text-align: left; padding: 0.7rem 0.85rem; border-radius: 6px; }
+  .footer-inner { flex-direction: column; align-items: stretch; }
 }
 
 @media (max-width: 720px) {
+  .header-inner { flex-wrap: wrap; gap: 1rem; }
   .nav { position: absolute; top: 100%; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 1rem 1.5rem; display: none; gap: 1rem; }
   .nav.is-open { display: flex; }
   .nav-toggle { display: flex; }
+  .hero { padding: 3rem 0 2rem; }
+  .hero-sub { max-width: 100%; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .carousel { padding: 2rem 0; }
+  .carousel-btn { padding: 0.55rem 1rem; }
+  .recruit-form { padding: 1.5rem; }
+  .recruit-form label { margin: 0.8rem 0 0.35rem; }
+  .site-footer { padding: 2rem 0 1rem; }
+  .footer-inner { gap: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

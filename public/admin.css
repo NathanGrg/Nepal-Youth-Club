@@ -104,5 +104,31 @@
   padding: 0;
 }
 
-.admin-table button.danger { color: #c0392b; }
+...admin-table button.danger { color: #c0392b; }
 .admin-table button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+
+@media (max-width: 860px) {
+  .admin-main { padding: 2rem 1rem 3rem; }
+  .admin-form { max-width: 100%; padding: 1.25rem; }
+  .admin-table { font-size: 0.82rem; }
+}
+
+@media (max-width: 720px) {
+  .admin-main { padding: 1.5rem 0.75rem 2rem; }
+  .admin-table { display: block; width: 100%; overflow-x: auto; }
+  .admin-table thead, .admin-table tr { display: table; width: 100%; table-layout: fixed; }
+  .admin-table td, .admin-table th { white-space: nowrap; }
+}
+
+@media (max-width: 860px) {
+  .admin-main { padding: 2rem 1rem 3rem; }
+  .admin-form { max-width: 100%; padding: 1.25rem; }
+  .admin-table { font-size: 0.82rem; }
+}
+
+@media (max-width: 720px) {
+  .admin-main { padding: 1.5rem 0.75rem 2rem; }
+  .admin-table { display: block; width: 100%; overflow-x: auto; }
+  .admin-table thead, .admin-table tr { display: table; width: 100%; table-layout: fixed; }
+  .admin-table td, .admin-table th { white-space: nowrap; }
+}
