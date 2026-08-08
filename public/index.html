@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nepal Youth Volleyball Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="logo">Nepal Youth CLub <span>VC</span></a>
+      <nav class="nav" id="primaryNav">
+        <a href="#events">Events</a>
+        <a href="#recruit">Join the Team</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-accent" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <p class="eyebrow">Perth, Australia</p>
+      <h1>Nepal Youth Club.</h1>
+      <p class="hero-sub">Built on hard work. Fueled by passion. United for greatness</p>
+      <div class="hero-actions">
+        <a href="#events" class="btn btn-primary">See Upcoming Events</a>
+        <a href="#recruit" class="btn btn-ghost">Try Out for the Team</a>
+      </div>
+      <dl class="stat-strip">
+        <div><dt>6</dt><dd>Seasons</dd></div>
+        <div><dt>40+</dt><dd>Active Players</dd></div>
+        <div><dt>12</dt><dd>Tournament Wins</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="carousel" id="carousel">
+    <div class="container">
+      <div class="carousel-inner">
+        <div class="carousel-track" data-interval="3800">
+          <div class="carousel-slide">
+            <img src="/2026-08-07 17.51.43.jpeg" alt="Volleyball action 1">
+          </div>
+          <div class="carousel-slide">
+            <img src="/2026-08-07 17.51.38.jpeg" alt="Volleyball action 2">
+          </div>
+          <div class="carousel-slide">
+            <img src="/2026-08-07 17.51.34.jpeg" alt="Volleyball action 3">
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-btn carousel-prev" aria-label="Previous slide">‹</button>
+          <button class="carousel-btn carousel-next" aria-label="Next slide">›</button>
+        </div>
+        <div class="carousel-dots" aria-hidden="false"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="events" id="events">
+    <div class="container">
+      <p class="eyebrow">Upcoming Events</p>
+      <h2>Where We're Playing Next</h2>
+      <div class="event-grid">
+
+        <article class="event-card">
+          <div class="event-date"><span class="day">14</span><span class="mon">Sep</span></div>
+          <div class="event-body">
+            <h3>Kingsway Indoor Stadium WA</h3>
+            <p class="event-meta"></p>
+            <p>Club teams from across perth face off in a weekend of pool play and knockouts.</p>
+            <a href="#contact" class="btn btn-small">Get Details</a>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-date"><span class="day">05</span><span class="mon">Oct</span></div>
+          <div class="event-body">
+            <h3>Kingsway Indoor Stadium WA</h3>
+            <p class="event-meta"></p>
+            <p>A friendly three-match series against neighboring clubs. Open to spectators, free entry.</p>
+            <a href="#contact" class="btn btn-small">Get Details</a>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-date"><span class="day">20</span><span class="mon">Dec</span></div>
+          <div class="event-body">
+            <h3>Kingsway Indoor Stadium WA</h3>
+            <p class="event-meta"></p>
+            <p>Our biggest tournament of the year — regional teams compete for the title.</p>
+            <a href="#contact" class="btn btn-small">Get Details</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="recruit" id="recruit">
+    <div class="container recruit-inner">
+      <div class="recruit-copy">
+        <p class="eyebrow">We're Recruiting</p>
+        <h2>Play Your Position.</h2>
+        <p>We're looking for committed players ahead of the fall season. Open tryouts run every Saturday morning — no invite needed, just show up ready to play.</p>
+        <ul class="position-list">
+          <li><span>Setter</span>1 spot open</li>
+          <li><span>Outside Hitter</span>2 spots open</li>
+          <li><span>Libero</span>1 spot open</li>
+          <li><span>Middle Blocker</span>Always scouting</li>
+        </ul>
+      </div>
+      <form class="recruit-form" id="recruitForm">
+        <h3>Register Your Interest</h3>
+        <label for="name">Full name</label>
+        <input type="text" id="name" name="name" required>
+        <label for="position">Preferred position</label>
+        <select id="position" name="position">
+          <option>Setter</option>
+          <option>Outside Hitter</option>
+          <option>Libero</option>
+          <option>Middle Blocker</option>
+          <option>Opposite</option>
+        </select>
+        <label for="contact">Phone or email</label>
+        <input type="text" id="contact" name="contact" required>
+        <button type="submit" class="btn btn-primary">Request a Trial</button>
+        <p class="form-note">This form is a placeholder for the mockup — we'll wire it up once the design's approved.</p>
+      </form>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="contact">
+    <div class="container footer-inner">
+      <div>
+        <p class="logo">Nepal Youth Club<span>VC</span></p>
+        <p>Perth, Australia</p>
+      </div>
+      <div>
+        <p>NYC@gmail.com</p>
+        <p>0412 814 895</p>
+        <p>0433 947 281</p>
+      </div>
+      <div class="footer-social">
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+      </div>
+    </div>
+    <p class="copyright"></p>
+  </footer>
+
+  <script src="/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Nepal Youth Club</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body class="admin-body">
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">Nepal Youth Club <span>VC</span></a>
+      <button id="logoutBtn" class="btn btn-small" style="display:none;">Log Out</button>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <section id="loginPanel" class="admin-panel">
+      <h2>Admin Login</h2>
+      <form id="loginForm" class="admin-form">
+        <label for="username">Username</label>
+        <input type="text" id="username" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" required>
+        <button type="submit" class="btn btn-primary">Log In</button>
+        <p class="form-note" id="loginError"></p>
+      </form>
+    </section>
+
+    <section id="dashboard" class="admin-panel" style="display:none;">
+
+      <h2 id="eventFormTitle">Add Event</h2>
+      <form id="eventForm" class="admin-form">
+        <label for="eventTitle">Title</label>
+        <input type="text" id="eventTitle" required>
+        <label for="eventDate">Date</label>
+        <input type="date" id="eventDate" required>
+        <label for="eventVenue">Venue</label>
+        <input type="text" id="eventVenue" required>
+        <label for="eventDescription">Description</label>
+        <textarea id="eventDescription" rows="3" required></textarea>
+        <button type="submit" class="btn btn-primary" id="eventSubmitBtn">Add Event</button>
+        <button type="button" class="btn btn-ghost-dark" id="eventCancelBtn" style="display:none;">Cancel Edit</button>
+      </form>
+
+      <h2>Events</h2>
+      <table class="admin-table" id="eventsTable">
+        <thead><tr><th>Date</th><th>Title</th><th>Venue</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <h2>Trial Requests</h2>
+      <table class="admin-table" id="requestsTable">
+        <thead><tr><th>Name</th><th>Position</th><th>Contact</th><th>Submitted</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+    </section>
+
+  </main>
+
+  <script src="/admin.js"></script>
+</body>
+</html>

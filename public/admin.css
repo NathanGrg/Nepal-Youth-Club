@@ -1,0 +1,108 @@
+/* Extends the tokens and components already defined in style.css */
+
+.admin-body { background: var(--white); }
+
+.admin-main {
+  padding: 3rem 1.5rem 5rem;
+  max-width: 900px;
+}
+
+.admin-panel { margin-bottom: 3rem; }
+
+.admin-panel h2 {
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.admin-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.5rem;
+  max-width: 480px;
+  margin-bottom: 2.5rem;
+}
+
+.admin-form label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--slate);
+  margin: 0.9rem 0 0.35rem;
+}
+
+.admin-form input,
+.admin-form textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  resize: vertical;
+}
+
+.admin-form input:focus-visible,
+.admin-form textarea:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 1px;
+}
+
+.admin-form button {
+  margin-top: 1.25rem;
+  margin-right: 0.6rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-ghost-dark {
+  background: transparent;
+  border: 2px solid var(--border);
+  color: var(--navy);
+}
+
+.btn-ghost-dark:hover { border-color: var(--slate); }
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.admin-table th, .admin-table td {
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.86rem;
+}
+
+.admin-table th {
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--slate);
+  background: #f4f6f8;
+}
+
+.admin-table tr:last-child td { border-bottom: none; }
+
+.admin-table button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--orange);
+  font-weight: 600;
+  font-size: 0.82rem;
+  margin-right: 0.85rem;
+  padding: 0;
+}
+
+.admin-table button.danger { color: #c0392b; }
+.admin-table button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
