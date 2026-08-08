@@ -11,6 +11,10 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html, body {
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background: var(--white);
@@ -387,7 +391,7 @@ a { color: inherit; }
 
 /* ---------- Carousel ---------- */
 .carousel { padding: 3.25rem 0; }
-.carousel-inner { position: relative; }
+.carousel-inner { position: relative; overflow: hidden; }
 .carousel-track {
   display: flex;
   gap: 1rem;
