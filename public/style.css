@@ -457,30 +457,57 @@ a { color: inherit; }
   .hero { padding: 4rem 0 3rem; }
   .hero-actions { gap: 0.75rem; }
   .stat-strip { gap: 1rem; }
+  .events { padding: 4rem 0; }
+  .recruit { padding: 4rem 0; }
 }
 
 @media (max-width: 860px) {
-  .recruit-inner { grid-template-columns: 1fr; }
+  .header-inner { padding: 1rem 1.25rem; }
+  .hero { padding: 3.5rem 0 2.5rem; }
+  .hero-actions { gap: 0.75rem; }
   .event-card { flex-direction: column; }
   .event-card:hover { transform: none; box-shadow: none; }
   .event-date { width: auto; text-align: left; padding: 0.7rem 0.85rem; border-radius: 6px; }
+  .recruit-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .recruit-form { padding: 1.75rem; }
   .footer-inner { flex-direction: column; align-items: stretch; }
+  .carousel { padding: 2.5rem 0; }
 }
 
 @media (max-width: 720px) {
-  .header-inner { flex-wrap: wrap; gap: 1rem; }
-  .nav { position: absolute; top: 100%; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 1rem 1.5rem; display: none; gap: 1rem; }
+  .header-inner { flex-wrap: wrap; gap: 1rem; justify-content: space-between; }
+  .nav { position: absolute; top: 100%; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 1rem 1rem; display: none; gap: 1rem; }
   .nav.is-open { display: flex; }
   .nav-toggle { display: flex; }
   .hero { padding: 3rem 0 2rem; }
+  .hero-inner { max-width: 100%; }
   .hero-sub { max-width: 100%; }
   .hero-actions { flex-direction: column; align-items: stretch; }
+  .btn, .btn-small { width: 100%; justify-content: center; }
   .carousel { padding: 2rem 0; }
-  .carousel-btn { padding: 0.55rem 1rem; }
+  .carousel-btn { padding: 0.55rem 1rem; font-size: 1.1rem; }
+  .carousel-slide img { max-height: 320px; }
   .recruit-form { padding: 1.5rem; }
   .recruit-form label { margin: 0.8rem 0 0.35rem; }
+  .position-list li { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   .site-footer { padding: 2rem 0 1rem; }
   .footer-inner { gap: 1rem; }
+  .container { padding: 0 1rem; }
+}
+
+@media (max-width: 540px) {
+  .header-inner { padding: 0.9rem 0.9rem; }
+  .logo { font-size: 1rem; }
+  .hero h1 { font-size: 2.4rem; }
+  .hero-sub { font-size: 1rem; }
+  .event-card { padding: 1rem; }
+  .event-body p, .event-meta { font-size: 0.9rem; }
+  .recruit-form { padding: 1.25rem; }
+  .site-footer { padding: 1.75rem 0 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .event-card { transition: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
