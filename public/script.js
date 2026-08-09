@@ -1,14 +1,17 @@
 const navToggle = document.getElementById('navToggle');
 const nav = document.getElementById('primaryNav');
 
-navToggle.addEventListener('click', () => {
-  const isOpen = nav.classList.toggle('is-open');
-  navToggle.setAttribute('aria-expanded', String(isOpen));
-});
+if (navToggle && nav) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+}
 
 const form = document.getElementById('recruitForm');
-const recruitNote = form.querySelector('.form-note') || document.getElementById('recruitNote');
-form.addEventListener('submit', async (e) => {
+const recruitNote = form ? (form.querySelector('.form-note') || document.getElementById('recruitNote')) : null;
+if (form) {
+  form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const submitBtn = form.querySelector('button[type="submit"]');
   submitBtn.disabled = true;
