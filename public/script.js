@@ -12,42 +12,46 @@ const form = document.getElementById('recruitForm');
 const recruitNote = form ? (form.querySelector('.form-note') || document.getElementById('recruitNote')) : null;
 if (form) {
   form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const submitBtn = form.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
-  if (recruitNote) recruitNote.textContent = '';
+    e.preventDefault();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+    if (recruitNote) recruitNote.textContent = '';
 
-  const payload = {
-    name: form.name.value,
-    position: form.position.value,
-    contact: form.contact.value
-  };
+    const payload = {
+      name: form.name.value,
+      position: form.position.value,
+      contact: form.contact.value
+    };
 
-  try {
-    const res = await fetch('/api/trial-requests', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok) throw new Error('Network response was not ok');
-    if (recruitNote) recruitNote.textContent = "Your request has been submitted. We'll be in touch.";
-    form.reset();
+    try {
+      const res = await fetch('/api/trial-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || 'Network response was not ok');
+      }
+      if (recruitNote) recruitNote.textContent = "Your request has been submitted. We'll be in touch.";
+      form.reset();
 
-    // Notify other tabs (admin) that a new request was created
-    if ('BroadcastChannel' in window) {
-      const bc = new BroadcastChannel('nyc_channel');
-      bc.postMessage({ type: 'new-trial-request' });
-      bc.close();
-    } else {
-      window.dispatchEvent(new CustomEvent('nyc:new-trial-request'));
+      // Notify other tabs (admin) that a new request was created
+      if ('BroadcastChannel' in window) {
+        const bc = new BroadcastChannel('nyc_channel');
+        bc.postMessage({ type: 'new-trial-request' });
+        bc.close();
+      } else {
+        window.dispatchEvent(new CustomEvent('nyc:new-trial-request'));
+      }
+    } catch (err) {
+      console.error('Failed to submit trial request', err);
+      if (recruitNote) recruitNote.textContent = 'Failed to submit request. Please try again later.';
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
     }
-  } catch (err) {
-    console.error('Failed to submit trial request', err);
-    if (recruitNote) recruitNote.textContent = 'Failed to submit request. Please try again later.';
-  } finally {
-    submitBtn.disabled = false;
-  }
-});
+  });
+}
 
 /* Carousel autoplay + controls */
 (function () {
@@ -60,6 +64,7 @@ if (form) {
   const prevBtn = carousel.querySelector('.carousel-prev');
   const nextBtn = carousel.querySelector('.carousel-next');
   const dotsWrap = carousel.querySelector('.carousel-dots');
+  const hasDots = Boolean(dotsWrap);
   let current = 0;
   const intervalMs = parseInt(track.dataset.interval, 10) || 4000;
 
@@ -68,17 +73,20 @@ if (form) {
   });
 
   // build dots
-  slides.forEach((_, i) => {
-    const btn = document.createElement('button');
-    if (i === 0) btn.classList.add('is-active');
-    btn.addEventListener('click', () => {
-      goToSlide(i);
-      restartTimer();
+  if (hasDots) {
+    slides.forEach((_, i) => {
+      const btn = document.createElement('button');
+      if (i === 0) btn.classList.add('is-active');
+      btn.addEventListener('click', () => {
+        goToSlide(i);
+        restartTimer();
+      });
+      dotsWrap.appendChild(btn);
     });
-    dotsWrap.appendChild(btn);
-  });
+  }
 
   function updateDots() {
+    if (!hasDots) return;
     Array.from(dotsWrap.children).forEach((b, idx) => b.classList.toggle('is-active', idx === current));
   }
 
@@ -99,6 +107,7 @@ if (form) {
   if (nextBtn) nextBtn.addEventListener('click', () => { next(); restartTimer(); });
   if (prevBtn) prevBtn.addEventListener('click', () => { prev(); restartTimer(); });
 
+  if (slides.length === 0) return;
   let timer = setInterval(next, intervalMs);
   function restartTimer() { clearInterval(timer); timer = setInterval(next, intervalMs); }
 
@@ -149,4 +158,4 @@ async function loadEvents() {
 }
 
 // Load events when page loads
-document.addEventListener('DOMContentLoaded', loadEvents);
+document.addEventListener('DOMContentLoaded', loadEvents)};
