@@ -6,11 +6,11 @@ dns.setServers(['1.1.1.1', '1.0.0.1']);
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const connectDB = require('./config/db');
+const connectDB = require('./src/config/db');
 
-const eventsRouter = require('./routes/event');
-const trialRequestsRouter = require('./routes/trialRequests');
-const authRouter = require('./routes/auth');
+const eventsRouter = require('./src/routes/event');
+const trialRequestsRouter = require('./src/routes/trialRequests');
+const authRouter = require('./src/routes/auth');
 
 const app = express();
 

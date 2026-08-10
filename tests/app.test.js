@@ -1,8 +1,8 @@
-jest.mock('../models/Event', () => ({
+jest.mock('../src/models/Event', () => ({
   find: jest.fn()
 }));
 
-jest.mock('../models/TrialRequest', () => ({
+jest.mock('../src/models/TrialRequest', () => ({
   create: jest.fn(),
   find: jest.fn()
 }));
@@ -11,8 +11,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const request = require('supertest');
 const { app } = require('../server');
-const Event = require('../models/Event');
-const TrialRequest = require('../models/TrialRequest');
+const Event = require('../src/models/Event');
+const TrialRequest = require('../src/models/TrialRequest');
 
 describe('API routes', () => {
   beforeEach(() => {
