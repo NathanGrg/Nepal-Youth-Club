@@ -53,6 +53,24 @@
         <tbody></tbody>
       </table>
 
+      <h2 id="playerFormTitle">Add Player</h2>
+      <form id="playerForm" class="admin-form">
+        <label for="playerName">Name</label>
+        <input type="text" id="playerName" required>
+        <label for="playerPosition">Position</label>
+        <input type="text" id="playerPosition" required>
+        <label for="playerPhotoUrl">Photo URL</label>
+        <input type="url" id="playerPhotoUrl">
+        <button type="submit" class="btn btn-primary" id="playerSubmitBtn">Add Player</button>
+        <button type="button" class="btn btn-ghost-dark" id="playerCancelBtn" style="display:none;">Cancel Edit</button>
+      </form>
+
+      <h2>Players</h2>
+      <table class="admin-table" id="playersTable">
+        <thead><tr><th>Name</th><th>Position</th><th>Photo</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+
       <h2>Trial Requests</h2>
       <table class="admin-table" id="requestsTable">
         <thead><tr><th>Name</th><th>Position</th><th>Contact</th><th>Submitted</th></tr></thead>

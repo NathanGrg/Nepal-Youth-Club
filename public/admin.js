@@ -1,5 +1,6 @@
 let token = localStorage.getItem('nyc_admin_token');
 let editingEventId = null;
+let editingPlayerId = null;
 let requestsIntervalId = null;
 
 const loginPanel = document.getElementById('loginPanel');
@@ -11,6 +12,7 @@ function showDashboard() {
   dashboard.style.display = 'block';
   logoutBtn.style.display = 'inline-block';
   loadEvents();
+  loadPlayers();
   loadRequests();
   // start polling for new requests every 10s
   if (!requestsIntervalId) requestsIntervalId = setInterval(loadRequests, 10000);
@@ -159,6 +161,85 @@ document.getElementById('eventForm').addEventListener('submit', async (e) => {
     loadEvents();
   } catch (err) {
     alert('Could not save event.');
+  }
+});
+
+// ---------- Players ----------
+async function loadPlayers() {
+  const res = await fetch('/api/players');
+  const players = await res.json();
+  window._players = players;
+
+  const tbody = document.querySelector('#playersTable tbody');
+  tbody.innerHTML = players
+    .map(
+      (player) => `
+    <tr>
+      <td>${player.name}</td>
+      <td>${player.position}</td>
+      <td>${player.photoUrl ? `<a href="${player.photoUrl}" target="_blank">View</a>` : '—'}</td>
+      <td>
+        <button onclick="editPlayer('${player._id}')">Edit</button>
+        <button class="danger" onclick="deletePlayer('${player._id}')">Delete</button>
+      </td>
+    </tr>`
+    )
+    .join('');
+}
+
+window.editPlayer = function (id) {
+  const player = window._players.find((p) => p._id === id);
+  if (!player) return;
+  editingPlayerId = id;
+  document.getElementById('playerName').value = player.name;
+  document.getElementById('playerPosition').value = player.position;
+  document.getElementById('playerPhotoUrl').value = player.photoUrl || '';
+  document.getElementById('playerFormTitle').textContent = 'Edit Player';
+  document.getElementById('playerSubmitBtn').textContent = 'Save Changes';
+  document.getElementById('playerCancelBtn').style.display = 'inline-block';
+  document.getElementById('playerForm').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.deletePlayer = async function (id) {
+  if (!confirm('Delete this player?')) return;
+  await authedFetch(`/api/players/${id}`, { method: 'DELETE' });
+  loadPlayers();
+};
+
+document.getElementById('playerCancelBtn').addEventListener('click', resetPlayerForm);
+
+function resetPlayerForm() {
+  editingPlayerId = null;
+  document.getElementById('playerForm').reset();
+  document.getElementById('playerFormTitle').textContent = 'Add Player';
+  document.getElementById('playerSubmitBtn').textContent = 'Add Player';
+  document.getElementById('playerCancelBtn').style.display = 'none';
+}
+
+document.getElementById('playerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const payload = {
+    name: document.getElementById('playerName').value,
+    position: document.getElementById('playerPosition').value,
+    photoUrl: document.getElementById('playerPhotoUrl').value || undefined
+  };
+
+  try {
+    if (editingPlayerId) {
+      await authedFetch(`/api/players/${editingPlayerId}`, {
+        method: 'PUT',
+        body: JSON.stringify(payload)
+      });
+    } else {
+      await authedFetch('/api/players', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+    }
+    resetPlayerForm();
+    loadPlayers();
+  } catch (err) {
+    alert('Could not save player.');
   }
 });
 
