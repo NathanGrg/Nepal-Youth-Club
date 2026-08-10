@@ -9,6 +9,7 @@ const path = require('path');
 const connectDB = require('./config/db');
 
 const eventsRouter = require('./routes/event');
+const playersRouter = require('./routes/players');
 const trialRequestsRouter = require('./routes/trialRequests');
 const authRouter = require('./routes/auth');
 
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use('/api/events', eventsRouter);
+app.use('/api/players', playersRouter);
 app.use('/api/trial-requests', trialRequestsRouter);
 app.use('/api/auth', authRouter);
 

@@ -7,12 +7,17 @@ jest.mock('../src/models/TrialRequest', () => ({
   find: jest.fn()
 }));
 
+jest.mock('../src/models/Player', () => ({
+  find: jest.fn()
+}));
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const request = require('supertest');
 const { app } = require('../server');
 const Event = require('../src/models/Event');
 const TrialRequest = require('../src/models/TrialRequest');
+const Player = require('../src/models/Player');
 
 describe('API routes', () => {
   beforeEach(() => {
@@ -50,6 +55,18 @@ describe('API routes', () => {
       name: 'Asha',
       email: 'asha@example.com'
     });
+  });
+
+  test('GET /api/players returns players from the database', async () => {
+    const mockSort = jest.fn().mockResolvedValue([{ name: 'Asha' }]);
+    Player.find.mockReturnValue({ sort: mockSort });
+
+    const response = await request(app).get('/api/players');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([{ name: 'Asha' }]);
+    expect(Player.find).toHaveBeenCalledTimes(1);
+    expect(mockSort).toHaveBeenCalledWith({ createdAt: 1 });
   });
 
   test('POST /api/auth/login returns a token for valid admin credentials', async () => {
