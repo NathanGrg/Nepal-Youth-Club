@@ -158,4 +158,4 @@ async function loadEvents() {
 }
 
 // Load events when page loads
-document.addEventListener('DOMContentLoaded', loadEvents)};
+document.addEventListener('DOMContentLoaded', loadEvents);
