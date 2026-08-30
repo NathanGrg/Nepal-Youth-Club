@@ -2,52 +2,152 @@
 const navToggle = document.getElementById('navToggle');
 const nav = document.getElementById('primaryNav');
 
-navToggle.addEventListener('click', () => {
-  const isOpen = nav.classList.toggle('is-open');
-  navToggle.setAttribute('aria-expanded', String(isOpen));
-});
+if (navToggle && nav) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
 
-// ---------- Players grid ----------
-const AVATAR_COLORS = ['var(--navy)', 'var(--orange)', 'var(--gold)'];
+  // Close nav on link click (mobile)
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
 
-function initials(name) {
+// ---------- Player Data (Static Fallback) ----------
+const DEFAULT_PLAYERS = [
+  {
+    name: "Ramesh Gurung",
+    position: "Setter",
+    photoUrl: null, // Use null to show avatar instead
+    number: 7
+  },
+  {
+    name: "Sita Thapa",
+    position: "Outside Hitter",
+    photoUrl: null,
+    number: 12
+  },
+  {
+    name: "Krishna Rai",
+    position: "Libero",
+    photoUrl: null,
+    number: 3
+  },
+  {
+    name: "Anita Sharma",
+    position: "Middle Blocker",
+    photoUrl: null,
+    number: 8
+  },
+  {
+    name: "Prakash Adhikari",
+    position: "Opposite",
+    photoUrl: null,
+    number: 15
+  },
+  {
+    name: "Sunita Karki",
+    position: "Setter",
+    photoUrl: null,
+    number: 2
+  },
+  {
+    name: "Bikash Tamang",
+    position: "Outside Hitter",
+    photoUrl: null,
+    number: 10
+  },
+  {
+    name: "Maya Limbu",
+    position: "Libero",
+    photoUrl: null,
+    number: 5
+  }
+];
+
+// ---------- Avatar Colors ----------
+const AVATAR_COLORS = [
+  'var(--orange)',
+  'var(--gold)', 
+  'var(--navy)',
+  '#e74c3c',
+  '#2ecc71',
+  '#3498db',
+  '#9b59b6',
+  '#1abc9c'
+];
+
+// ---------- Helper Functions ----------
+function getInitials(name) {
   return name
     .split(' ')
     .filter(Boolean)
     .slice(0, 2)
-    .map((part) => part[0].toUpperCase())
+    .map(part => part[0].toUpperCase())
     .join('');
 }
 
+function getRandomColor(index) {
+  return AVATAR_COLORS[index % AVATAR_COLORS.length];
+}
+
+// ---------- Render Player Card ----------
 function renderPlayerCard(player, index) {
-  const color = AVATAR_COLORS[index % AVATAR_COLORS.length];
-  const photo = player.photoUrl
-    ? `<img src="${player.photoUrl}" alt="${player.name}" class="player-photo">`
-    : `<div class="player-avatar" style="background:${color}">${initials(player.name)}</div>`;
+  const color = getRandomColor(index);
+  const hasPhoto = player.photoUrl && player.photoUrl.trim() !== '';
+
+  const photoHtml = hasPhoto
+    ? `<img src="${player.photoUrl}" alt="${player.name}" class="player-photo" loading="lazy">`
+    : `<div class="player-avatar" style="background:${color}">${getInitials(player.name)}</div>`;
+
+  const numberHtml = player.number
+    ? `<span class="player-number">#${player.number}</span>`
+    : '';
 
   return `
     <article class="player-card">
-      ${photo}
+      ${photoHtml}
+      ${numberHtml}
       <h3>${player.name}</h3>
       <p class="player-position">${player.position}</p>
-    </article>`;
+    </article>
+  `;
 }
 
+// ---------- Load Players (API with static fallback) ----------
 async function loadPlayers() {
   const grid = document.getElementById('playersGrid');
   const empty = document.getElementById('playersEmpty');
+  
+  if (!grid) return;
+
   try {
+    // Try to fetch from API
     const res = await fetch('/api/players');
-    const players = await res.json();
-    if (!players.length) {
-      empty.style.display = 'block';
-      return;
+    
+    if (res.ok) {
+      const players = await res.json();
+      
+      if (players && players.length > 0) {
+        grid.innerHTML = players.map(renderPlayerCard).join('');
+        return;
+      }
     }
-    grid.innerHTML = players.map(renderPlayerCard).join('');
+    
+    // If API fails or returns empty, use static data
+    console.log('Using static player data (API unavailable)');
+    grid.innerHTML = DEFAULT_PLAYERS.map(renderPlayerCard).join('');
+    
   } catch (err) {
-    empty.textContent = 'Could not load the roster right now — please refresh.';
-    empty.style.display = 'block';
+    // API error — use static data
+    console.warn('Could not fetch players from API, using static data:', err);
+    grid.innerHTML = DEFAULT_PLAYERS.map(renderPlayerCard).join('');
   }
 }
 
-loadPlayers();
+// ---------- Run on page load ----------
+document.addEventListener('DOMContentLoaded', loadPlayers);
