@@ -26,7 +26,7 @@ const DEFAULT_PLAYERS = [
     number: 7
   },
   {
-    name: "Sita Thapa",
+    name: "Durga Thapa",
     position: "Outside Hitter",
     photoUrl: null,
     number: 12
@@ -38,7 +38,7 @@ const DEFAULT_PLAYERS = [
     number: 3
   },
   {
-    name: "Anita Sharma",
+    name: "Saroj Sharma",
     position: "Middle Blocker",
     photoUrl: null,
     number: 8
@@ -50,7 +50,7 @@ const DEFAULT_PLAYERS = [
     number: 15
   },
   {
-    name: "Sunita Karki",
+    name: "Kumar Karki",
     position: "Setter",
     photoUrl: null,
     number: 2
@@ -62,7 +62,7 @@ const DEFAULT_PLAYERS = [
     number: 10
   },
   {
-    name: "Maya Limbu",
+    name: "Himal Limbu",
     position: "Libero",
     photoUrl: null,
     number: 5
@@ -74,11 +74,11 @@ const AVATAR_COLORS = [
   'var(--orange)',
   'var(--gold)', 
   'var(--navy)',
-  '#e74c3c',
-  '#2ecc71',
-  '#3498db',
+  '#773831',
+  '#2e3bcc',
+  '#975f28',
   '#9b59b6',
-  '#1abc9c'
+  '#842989'
 ];
 
 // ---------- Helper Functions ----------
