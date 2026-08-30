@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Nepal Youth Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <%- include('partials/header', { currentPath: '/match-reports' }) %>
+
+  <section class="match-reports">
+    <div class="container">
+      <p class="eyebrow">Latest Games</p>
+      <h1>Match Reports</h1>
+      <p class="section-subtitle">Recaps, highlights, and key moments from every match.</p>
+
+      <div class="reports-grid">
+        <% if (reports && reports.length > 0) { %>
+          <% reports.forEach(report => { %>
+            <article class="report-card">
+              <div class="report-image">
+                <% if (report.featuredImage) { %>
+                  <img src="<%= report.featuredImage %>" alt="<%= report.match.opponent %>" loading="lazy">
+                <% } else { %>
+                  <div class="report-placeholder">
+                    <span class="report-date-badge">
+                      <%= new Date(report.match.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short' }) %>
+                    </span>
+                  </div>
+                <% } %>
+                <span class="report-result <%= report.match.resultBadge %>">
+                  <%= report.match.result %>
+                </span>
+              </div>
+              <div class="report-content">
+                <div class="report-meta">
+                  <span class="report-opponent"><%= report.match.opponent %></span>
+                  <span class="report-score"><%= report.match.homeScore %> - <%= report.match.awayScore %></span>
+                </div>
+                <h3><%= report.match.homeTeam %> vs <%= report.match.opponent %></h3>
+                <p><%= report.summary.substring(0, 120) %><%= report.summary.length > 120 ? '…' : '' %></p>
+                <div class="report-footer">
+                  <span class="report-date"><%= new Date(report.match.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+                  <a href="/match-reports/<%= report._id %>" class="btn btn-small">Read Full Report</a>
+                </div>
+              </div>
+            </article>
+          <% }) %>
+        <% } else { %>
+          <p class="empty-message">No match reports yet. Check back soon!</p>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <script src="/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Nepal Youth Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <section class="match-report-detail">
+    <div class="container">
+      <div class="report-header">
+        <p class="eyebrow">Match Report</p>
+        <h1><%= report.match.homeTeam %> vs <%= report.match.opponent %></h1>
+        <div class="report-header-meta">
+          <span class="report-date"><%= new Date(report.match.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+          <span class="report-venue"><i class="fas fa-map-pin"></i> <%= report.match.venue %></span>
+          <span class="report-result-badge <%= report.match.resultBadge %>">
+            <%= report.match.result %>
+          </span>
+          <span class="report-score"><%= report.match.homeScore %> - <%= report.match.awayScore %></span>
+        </div>
+      </div>
+
+      <div class="report-body">
+        <% if (report.featuredImage) { %>
+          <div class="report-featured-image">
+            <img src="<%= report.featuredImage %>" alt="<%= report.match.opponent %> match">
+          </div>
+        <% } %>
+
+        <div class="report-summary">
+          <h2>Match Summary</h2>
+          <p><%= report.summary.replace(/\n/g, '<br>') %></p>
+        </div>
+
+        <% if (report.highlights) { %>
+          <div class="report-highlights">
+            <h2>Key Highlights</h2>
+            <p><%= report.highlights.replace(/\n/g, '<br>') %></p>
+          </div>
+        <% } %>
+
+        <% if (report.keyPlayers && report.keyPlayers.length > 0) { %>
+          <div class="report-key-players">
+            <h2>Key Players</h2>
+            <div class="key-players-grid">
+              <% report.keyPlayers.forEach(player => { %>
+                <div class="key-player-card">
+                  <% if (player.photoUrl) { %>
+                    <img src="<%= player.photoUrl %>" alt="<%= player.name %>">
+                  <% } else { %>
+                    <div class="key-player-avatar"><%= player.name.charAt(0).toUpperCase() %></div>
+                  <% } %>
+                  <h4><%= player.name %></h4>
+                  <p><%= player.position %></p>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+
+        <% if (report.bestPlayer) { %>
+          <div class="report-best-player">
+            <h2>🏆 Player of the Match</h2>
+            <div class="best-player-card">
+              <% if (report.bestPlayer.photoUrl) { %>
+                <img src="<%= report.bestPlayer.photoUrl %>" alt="<%= report.bestPlayer.name %>">
+              <% } else { %>
+                <div class="best-player-avatar"><%= report.bestPlayer.name.charAt(0).toUpperCase() %></div>
+              <% } %>
+              <div class="best-player-info">
+                <h3><%= report.bestPlayer.name %></h3>
+                <p><%= report.bestPlayer.position %> • #<%= report.bestPlayer.number %></p>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="report-actions">
+        <a href="/match-reports" class="btn btn-primary">← All Reports</a>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <script src="/script.js"></script>
+</body>
+</html>

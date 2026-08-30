@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="admin-body">
 
@@ -19,6 +20,9 @@
 
   <main class="container admin-main">
 
+    <!-- ============================================ -->
+    <!-- LOGIN PANEL -->
+    <!-- ============================================ -->
     <section id="loginPanel" class="admin-panel">
       <h2>Admin Login</h2>
       <form id="loginForm" class="admin-form">
@@ -31,8 +35,12 @@
       </form>
     </section>
 
+    <!-- ============================================ -->
+    <!-- DASHBOARD -->
+    <!-- ============================================ -->
     <section id="dashboard" class="admin-panel" style="display:none;">
 
+      <!-- -------- Events -------- -->
       <h2 id="eventFormTitle">Add Event</h2>
       <form id="eventForm" class="admin-form">
         <label for="eventTitle">Title</label>
@@ -43,34 +51,135 @@
         <input type="text" id="eventVenue" required>
         <label for="eventDescription">Description</label>
         <textarea id="eventDescription" rows="3" required></textarea>
-        <button type="submit" class="btn btn-primary" id="eventSubmitBtn">Add Event</button>
-        <button type="button" class="btn btn-ghost-dark" id="eventCancelBtn" style="display:none;">Cancel Edit</button>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="eventSubmitBtn">Add Event</button>
+          <button type="button" class="btn btn-ghost-dark" id="eventCancelBtn" style="display:none;">Cancel</button>
+        </div>
       </form>
 
       <h2>Events</h2>
       <table class="admin-table" id="eventsTable">
-        <thead><tr><th>Date</th><th>Title</th><th>Venue</th><th></th></tr></thead>
+        <thead><tr><th>Date</th><th>Title</th><th>Venue</th><th>Actions</th></tr></thead>
         <tbody></tbody>
       </table>
 
+      <!-- -------- Players -------- -->
       <h2 id="playerFormTitle">Add Player</h2>
       <form id="playerForm" class="admin-form">
         <label for="playerName">Name</label>
         <input type="text" id="playerName" required>
         <label for="playerPosition">Position</label>
-        <input type="text" id="playerPosition" required>
+        <select id="playerPosition" required>
+          <option value="Setter">Setter</option>
+          <option value="Outside Hitter">Outside Hitter</option>
+          <option value="Libero">Libero</option>
+          <option value="Middle Blocker">Middle Blocker</option>
+          <option value="Opposite">Opposite</option>
+        </select>
+        <label for="playerNumber">Jersey Number</label>
+        <input type="number" id="playerNumber" required>
         <label for="playerPhotoUrl">Photo URL</label>
-        <input type="url" id="playerPhotoUrl">
-        <button type="submit" class="btn btn-primary" id="playerSubmitBtn">Add Player</button>
-        <button type="button" class="btn btn-ghost-dark" id="playerCancelBtn" style="display:none;">Cancel Edit</button>
+        <input type="url" id="playerPhotoUrl" placeholder="/images/players/player.jpg">
+        <label for="playerHeight">Height (e.g., 5'11")</label>
+        <input type="text" id="playerHeight" placeholder="5'11&quot;">
+        <label for="playerAge">Age</label>
+        <input type="number" id="playerAge">
+        <label for="playerExperience">Experience</label>
+        <input type="text" id="playerExperience" placeholder="5 years">
+        <label for="playerBio">Bio</label>
+        <textarea id="playerBio" rows="3"></textarea>
+        <label style="display:flex;align-items:center;gap:0.5rem;margin:0.5rem 0;">
+          <input type="checkbox" id="playerActive" checked>
+          Active on Roster
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="playerSubmitBtn">Add Player</button>
+          <button type="button" class="btn btn-ghost-dark" id="playerCancelBtn" style="display:none;">Cancel</button>
+        </div>
       </form>
 
       <h2>Players</h2>
       <table class="admin-table" id="playersTable">
-        <thead><tr><th>Name</th><th>Position</th><th>Photo</th><th></th></tr></thead>
+        <thead><tr><th>#</th><th>Name</th><th>Position</th><th>Photo</th><th>Actions</th></tr></thead>
         <tbody></tbody>
       </table>
 
+      <!-- -------- Match Reports -------- -->
+      <h2 id="reportFormTitle">Add Match Report</h2>
+      <form id="reportForm" class="admin-form">
+        <label for="reportMatch">Match</label>
+        <select id="reportMatch" required>
+          <option value="">Select a match</option>
+        </select>
+        <label for="reportSummary">Summary</label>
+        <textarea id="reportSummary" rows="4" required placeholder="Write a summary of the match..."></textarea>
+        <label for="reportHighlights">Highlights</label>
+        <textarea id="reportHighlights" rows="3" placeholder="Key moments, standout plays..."></textarea>
+        <label for="reportBestPlayer">Player of the Match</label>
+        <select id="reportBestPlayer">
+          <option value="">Select best player</option>
+        </select>
+        <label for="reportFeaturedImage">Featured Image URL</label>
+        <input type="url" id="reportFeaturedImage" placeholder="/images/match-reports/featured.jpg">
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="reportSubmitBtn">Add Report</button>
+          <button type="button" class="btn btn-ghost-dark" id="reportCancelBtn" style="display:none;">Cancel</button>
+        </div>
+      </form>
+
+      <h2>Match Reports</h2>
+      <table class="admin-table" id="reportsTable">
+        <thead><tr><th>Opponent</th><th>Date</th><th>Best Player</th><th>Summary</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <!-- -------- Player of the Month -------- -->
+      <h2 id="potmFormTitle">Add Player of the Month</h2>
+      <form id="potmForm" class="admin-form">
+        <label for="potmPlayer">Player</label>
+        <select id="potmPlayer" required>
+          <option value="">Select a player</option>
+        </select>
+        <label for="potmMonth">Month</label>
+        <select id="potmMonth" required>
+          <option value="January">January</option>
+          <option value="February">February</option>
+          <option value="March">March</option>
+          <option value="April">April</option>
+          <option value="May">May</option>
+          <option value="June">June</option>
+          <option value="July">July</option>
+          <option value="August">August</option>
+          <option value="September">September</option>
+          <option value="October">October</option>
+          <option value="November">November</option>
+          <option value="December">December</option>
+        </select>
+        <label for="potmYear">Year</label>
+        <input type="number" id="potmYear" value="2025" required>
+        <label for="potmAchievement">Achievement</label>
+        <textarea id="potmAchievement" rows="2" placeholder="What did they achieve this month?"></textarea>
+        <label for="potmStats">Stats</label>
+        <input type="text" id="potmStats" placeholder="e.g., 42 assists, 8 digs, 4 blocks">
+        <label for="potmQuote">Quote</label>
+        <input type="text" id="potmQuote" placeholder="Their quote about the achievement">
+        <label style="display:flex;align-items:center;gap:0.5rem;margin:0.5rem 0;">
+          <input type="checkbox" id="potmFeatured">
+          Featured (displayed as current POTM)
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="potmSubmitBtn">Add POTM</button>
+          <button type="button" class="btn btn-ghost-dark" id="potmCancelBtn" style="display:none;">Cancel</button>
+        </div>
+      </form>
+
+      <h2>Player of the Month</h2>
+      <table class="admin-table" id="potmTable">
+        <thead><tr><th>Player</th><th>Month/Year</th><th>Status</th><th>Achievement</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <!-- -------- Trial Requests -------- -->
       <h2>Trial Requests</h2>
       <table class="admin-table" id="requestsTable">
         <thead><tr><th>Name</th><th>Position</th><th>Contact</th><th>Submitted</th></tr></thead>

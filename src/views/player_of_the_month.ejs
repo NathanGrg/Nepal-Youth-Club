@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Nepal Youth Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <section class="potm-section">
+    <div class="container">
+      <p class="eyebrow">Recognizing Excellence</p>
+      <h1>Player of the Month</h1>
+      <p class="section-subtitle">Celebrating our standout performers.</p>
+
+      <% if (currentPOTM) { %>
+        <!-- Current Player of the Month -->
+        <div class="potm-featured">
+          <div class="potm-featured-card">
+            <div class="potm-image">
+              <% if (currentPOTM.player.photoUrl) { %>
+                <img src="<%= currentPOTM.player.photoUrl %>" alt="<%= currentPOTM.player.name %>">
+              <% } else { %>
+                <div class="potm-avatar"><%= currentPOTM.player.name.charAt(0).toUpperCase() %></div>
+              <% } %>
+              <span class="potm-badge">🏆 Player of the Month</span>
+            </div>
+            <div class="potm-info">
+              <h2><%= currentPOTM.player.name %></h2>
+              <p class="potm-position"><%= currentPOTM.player.position %> • #<%= currentPOTM.player.number %></p>
+              <p class="potm-month"><%= currentPOTM.month %> <%= currentPOTM.year %></p>
+              
+              <% if (currentPOTM.achievement) { %>
+                <div class="potm-achievement">
+                  <h3>Achievement</h3>
+                  <p><%= currentPOTM.achievement %></p>
+                </div>
+              <% } %>
+              
+              <% if (currentPOTM.stats) { %>
+                <div class="potm-stats">
+                  <h3>Stats</h3>
+                  <p><%= currentPOTM.stats %></p>
+                </div>
+              <% } %>
+              
+              <% if (currentPOTM.quote) { %>
+                <blockquote class="potm-quote">
+                  "<%= currentPOTM.quote %>"
+                  <cite>— <%= currentPOTM.player.name %></cite>
+                </blockquote>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% } else { %>
+        <p class="empty-message">Player of the Month coming soon!</p>
+      <% } %>
+
+      <!-- Past Players of the Month -->
+      <% if (pastPOTM && pastPOTM.length > 0) { %>
+        <div class="potm-past">
+          <h2>Past Honorees</h2>
+          <div class="potm-grid">
+            <% pastPOTM.forEach(potm => { %>
+              <div class="potm-card">
+                <div class="potm-card-image">
+                  <% if (potm.player.photoUrl) { %>
+                    <img src="<%= potm.player.photoUrl %>" alt="<%= potm.player.name %>">
+                  <% } else { %>
+                    <div class="potm-card-avatar"><%= potm.player.name.charAt(0).toUpperCase() %></div>
+                  <% } %>
+                </div>
+                <div class="potm-card-info">
+                  <h4><%= potm.player.name %></h4>
+                  <p><%= potm.player.position %></p>
+                  <span class="potm-month-badge"><%= potm.month %> <%= potm.year %></span>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <script src="/script.js"></script>
+</body>
+</html>

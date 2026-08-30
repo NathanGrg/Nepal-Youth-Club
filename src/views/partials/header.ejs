@@ -1,0 +1,22 @@
+<!-- ============================================ -->
+<!-- HEADER PARTIAL -->
+<!-- ============================================ -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo">Nepal Youth Club <span>VC</span></a>
+    <nav class="nav" id="primaryNav">
+      <a href="/players" <%= currentPath === '/players' ? 'class="active"' : '' %>>Players</a>
+      <a href="/match-reports" <%= currentPath === '/match-reports' ? 'class="active"' : '' %>>Reports</a>
+      <a href="/player-of-the-month" <%= currentPath === '/player-of-the-month' ? 'class="active"' : '' %>>POTM</a>
+      <a href="/#events">Events</a>
+      <a href="/#recruit">Join the Team</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Include Font Awesome for social icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

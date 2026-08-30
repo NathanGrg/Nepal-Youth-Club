@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error | Nepal Youth Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <%- include('partials/header', { currentPath: '' }) %>
+
+  <section class="error-page" style="padding:4rem 0;text-align:center;">
+    <div class="container">
+      <h1 style="font-size:4rem;color:var(--orange);">Oops!</h1>
+      <h2 style="font-size:2rem;margin-bottom:1rem;"><%= message || 'Something went wrong' %></h2>
+      <p style="color:var(--slate);max-width:40ch;margin:0 auto 2rem;">
+        We're sorry, but we couldn't find what you were looking for.
+      </p>
+      <a href="/" class="btn btn-primary">Back to Home</a>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <script src="/script.js"></script>
+</body>
+</html>

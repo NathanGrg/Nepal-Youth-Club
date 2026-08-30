@@ -1,6 +1,8 @@
 let token = localStorage.getItem('nyc_admin_token');
 let editingEventId = null;
 let editingPlayerId = null;
+let editingReportId = null;
+let editingPOTMId = null;
 let requestsIntervalId = null;
 
 const loginPanel = document.getElementById('loginPanel');
@@ -14,6 +16,8 @@ function showDashboard() {
   loadEvents();
   loadPlayers();
   loadRequests();
+  loadMatchReports();
+  loadPOTM();
   // start polling for new requests every 10s
   if (!requestsIntervalId) requestsIntervalId = setInterval(loadRequests, 10000);
 }
@@ -22,13 +26,12 @@ function showLogin() {
   loginPanel.style.display = 'block';
   dashboard.style.display = 'none';
   logoutBtn.style.display = 'none';
-  // stop polling when logged out
   if (requestsIntervalId) { clearInterval(requestsIntervalId); requestsIntervalId = null; }
 }
 
 if (token) showDashboard(); else showLogin();
 
-// Listen for notifications from other tabs (e.g. when a new trial request is submitted)
+// Broadcast channel for cross‑tab notifications
 if ('BroadcastChannel' in window) {
   const bc = new BroadcastChannel('nyc_channel');
   bc.addEventListener('message', (ev) => {
@@ -68,7 +71,7 @@ logoutBtn.addEventListener('click', () => {
   showLogin();
 });
 
-// Wraps fetch with the admin token attached; drops back to login on 401
+// Wraps fetch with admin token
 async function authedFetch(url, options = {}) {
   options.headers = {
     ...(options.headers || {}),
@@ -83,7 +86,7 @@ async function authedFetch(url, options = {}) {
   return res;
 }
 
-// ---------- Events ----------
+// ---------- EVENTS ----------
 async function loadEvents() {
   const res = await fetch('/api/events');
   const events = await res.json();
@@ -164,7 +167,7 @@ document.getElementById('eventForm').addEventListener('submit', async (e) => {
   }
 });
 
-// ---------- Players ----------
+// ---------- PLAYERS ----------
 async function loadPlayers() {
   const res = await fetch('/api/players');
   const players = await res.json();
@@ -243,7 +246,7 @@ document.getElementById('playerForm').addEventListener('submit', async (e) => {
   }
 });
 
-// ---------- Trial requests (read-only) ----------
+// ---------- TRIAL REQUESTS (read-only) ----------
 async function loadRequests() {
   const res = await authedFetch('/api/trial-requests');
   const requests = await res.json();
@@ -260,4 +263,312 @@ async function loadRequests() {
     </tr>`
     )
     .join('');
+}
+
+// ============================================================
+//  MATCH REPORTS
+// ============================================================
+async function loadMatchReports() {
+  const res = await authedFetch('/api/admin/match-reports');
+  const reports = await res.json();
+  window._reports = reports;
+
+  const tbody = document.querySelector('#reportsTable tbody');
+  if (!tbody) return;
+  tbody.innerHTML = reports
+    .map(
+      (r) => `
+    <tr>
+      <td>${r.match ? r.match.opponent : 'N/A'}</td>
+      <td>${r.match ? new Date(r.match.date).toLocaleDateString() : 'N/A'}</td>
+      <td>${r.bestPlayer ? r.bestPlayer.name : '—'}</td>
+      <td>${r.summary.substring(0, 60)}${r.summary.length > 60 ? '…' : ''}</td>
+      <td>
+        <button onclick="editReport('${r._id}')">Edit</button>
+        <button class="danger" onclick="deleteReport('${r._id}')">Delete</button>
+      </td>
+    </tr>`
+    )
+    .join('');
+}
+
+window.editReport = function (id) {
+  const report = window._reports.find((r) => r._id === id);
+  if (!report) return;
+  editingReportId = id;
+
+  document.getElementById('reportMatch').value = report.match?._id || '';
+  document.getElementById('reportSummary').value = report.summary;
+  document.getElementById('reportHighlights').value = report.highlights || '';
+  document.getElementById('reportBestPlayer').value = report.bestPlayer?._id || '';
+  document.getElementById('reportFeaturedImage').value = report.featuredImage || '';
+
+  document.getElementById('reportFormTitle').textContent = 'Edit Match Report';
+  document.getElementById('reportSubmitBtn').textContent = 'Save Changes';
+  document.getElementById('reportCancelBtn').style.display = 'inline-block';
+  document.getElementById('reportForm').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.deleteReport = async function (id) {
+  if (!confirm('Delete this match report?')) return;
+  await authedFetch(`/api/admin/match-reports/${id}`, { method: 'DELETE' });
+  loadMatchReports();
+};
+
+document.getElementById('reportCancelBtn')?.addEventListener('click', resetReportForm);
+
+function resetReportForm() {
+  editingReportId = null;
+  document.getElementById('reportForm').reset();
+  document.getElementById('reportFormTitle').textContent = 'Add Match Report';
+  document.getElementById('reportSubmitBtn').textContent = 'Add Report';
+  document.getElementById('reportCancelBtn').style.display = 'none';
+}
+
+document.getElementById('reportForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const payload = {
+    match: document.getElementById('reportMatch').value,
+    summary: document.getElementById('reportSummary').value,
+    highlights: document.getElementById('reportHighlights').value,
+    bestPlayer: document.getElementById('reportBestPlayer').value || null,
+    featuredImage: document.getElementById('reportFeaturedImage').value || null
+  };
+
+  try {
+    if (editingReportId) {
+      await authedFetch(`/api/admin/match-reports/${editingReportId}`, {
+        method: 'PUT',
+        body: JSON.stringify(payload)
+      });
+    } else {
+      await authedFetch('/api/admin/match-reports', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+    }
+    resetReportForm();
+    loadMatchReports();
+  } catch (err) {
+    alert('Could not save match report.');
+  }
+});
+
+// ============================================================
+//  PLAYER OF THE MONTH
+// ============================================================
+async function loadPOTM() {
+  const res = await authedFetch('/api/admin/player-of-the-month');
+  const potmList = await res.json();
+  window._potmList = potmList;
+
+  const tbody = document.querySelector('#potmTable tbody');
+  if (!tbody) return;
+  tbody.innerHTML = potmList
+    .map(
+      (p) => `
+    <tr>
+      <td>${p.player ? p.player.name : 'N/A'}</td>
+      <td>${p.month} ${p.year}</td>
+      <td>${p.isFeatured ? '⭐ Featured' : '—'}</td>
+      <td>${p.achievement ? p.achievement.substring(0, 40) + '…' : '—'}</td>
+      <td>
+        <button onclick="editPOTM('${p._id}')">Edit</button>
+        <button class="danger" onclick="deletePOTM('${p._id}')">Delete</button>
+      </td>
+    </tr>`
+    )
+    .join('');
+}
+
+window.editPOTM = function (id) {
+  const potm = window._potmList.find((p) => p._id === id);
+  if (!potm) return;
+  editingPOTMId = id;
+
+  document.getElementById('potmPlayer').value = potm.player?._id || '';
+  document.getElementById('potmMonth').value = potm.month;
+  document.getElementById('potmYear').value = potm.year;
+  document.getElementById('potmAchievement').value = potm.achievement || '';
+  document.getElementById('potmStats').value = potm.stats || '';
+  document.getElementById('potmQuote').value = potm.quote || '';
+  document.getElementById('potmFeatured').checked = potm.isFeatured || false;
+
+  document.getElementById('potmFormTitle').textContent = 'Edit Player of the Month';
+  document.getElementById('potmSubmitBtn').textContent = 'Save Changes';
+  document.getElementById('potmCancelBtn').style.display = 'inline-block';
+  document.getElementById('potmForm').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.deletePOTM = async function (id) {
+  if (!confirm('Delete this Player of the Month?')) return;
+  await authedFetch(`/api/admin/player-of-the-month/${id}`, { method: 'DELETE' });
+  loadPOTM();
+};
+
+document.getElementById('potmCancelBtn')?.addEventListener('click', resetPOTMForm);
+
+function resetPOTMForm() {
+  editingPOTMId = null;
+  document.getElementById('potmForm').reset();
+  document.getElementById('potmFormTitle').textContent = 'Add Player of the Month';
+  document.getElementById('potmSubmitBtn').textContent = 'Add POTM';
+  document.getElementById('potmCancelBtn').style.display = 'none';
+}
+
+document.getElementById('potmForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const payload = {
+    player: document.getElementById('potmPlayer').value,
+    month: document.getElementById('potmMonth').value,
+    year: parseInt(document.getElementById('potmYear').value, 10),
+    achievement: document.getElementById('potmAchievement').value,
+    stats: document.getElementById('potmStats').value,
+    quote: document.getElementById('potmQuote').value,
+    isFeatured: document.getElementById('potmFeatured').checked
+  };
+
+  try {
+    if (editingPOTMId) {
+      await authedFetch(`/api/admin/player-of-the-month/${editingPOTMId}`, {
+        method: 'PUT',
+        body: JSON.stringify(payload)
+      });
+    } else {
+      await authedFetch('/api/admin/player-of-the-month', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+    }
+    resetPOTMForm();
+    loadPOTM();
+  } catch (err) {
+    alert('Could not save Player of the Month.');
+  }
+});
+
+// ---------- Helper: populate dropdowns (called from admin.html) ----------
+async function populateReportDropdowns() {
+  try {
+    const [matchesRes, playersRes] = await Promise.all([
+      authedFetch('/api/admin/matches'),
+      authedFetch('/api/admin/players')
+    ]);
+    const matches = await matchesRes.json();
+    const players = await playersRes.json();
+
+    const matchSelect = document.getElementById('reportMatch');
+    if (matchSelect) {
+      matchSelect.innerHTML = '<option value="">Select a match</option>' +
+        matches.map(m => `<option value="${m._id}">${m.opponent} (${new Date(m.date).toLocaleDateString()})</option>`).join('');
+    }
+
+    const playerSelect = document.getElementById('reportBestPlayer');
+    if (playerSelect) {
+      playerSelect.innerHTML = '<option value="">Select best player</option>' +
+        players.map(p => `<option value="${p._id}">${p.name} (${p.position})</option>`).join('');
+    }
+
+    const potmPlayerSelect = document.getElementById('potmPlayer');
+    if (potmPlayerSelect) {
+      potmPlayerSelect.innerHTML = '<option value="">Select a player</option>' +
+        players.map(p => `<option value="${p._id}">${p.name} (${p.position})</option>`).join('');
+    }
+  } catch (error) {
+    console.error('Error populating dropdowns:', error);
+  }
+}
+
+// Call this after login or on page load
+if (token) {
+  populateReportDropdowns();
+}
+// ============================================
+// MATCH REPORT MANAGEMENT
+// ============================================
+
+async function loadMatchReports() {
+  try {
+    const res = await fetch('/api/admin/match-reports');
+    const reports = await res.json();
+    // Render to admin table
+    renderReportsTable(reports);
+  } catch (error) {
+    console.error('Error loading match reports:', error);
+  }
+}
+
+async function createMatchReport(data) {
+  try {
+    const res = await fetch('/api/admin/match-reports', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  } catch (error) {
+    console.error('Error creating match report:', error);
+  }
+}
+
+async function updateMatchReport(id, data) {
+  try {
+    const res = await fetch(`/api/admin/match-reports/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  } catch (error) {
+    console.error('Error updating match report:', error);
+  }
+}
+
+async function deleteMatchReport(id) {
+  try {
+    const res = await fetch(`/api/admin/match-reports/${id}`, {
+      method: 'DELETE'
+    });
+    return await res.json();
+  } catch (error) {
+    console.error('Error deleting match report:', error);
+  }
+}
+
+// ============================================
+// PLAYER OF THE MONTH MANAGEMENT
+// ============================================
+
+async function loadPOTM() {
+  try {
+    const res = await fetch('/api/admin/player-of-the-month');
+    const potm = await res.json();
+    renderPOTMTable(potm);
+  } catch (error) {
+    console.error('Error loading POTM:', error);
+  }
+}
+
+async function createPOTM(data) {
+  try {
+    const res = await fetch('/api/admin/player-of-the-month', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  } catch (error) {
+    console.error('Error creating POTM:', error);
+  }
+}
+
+async function deletePOTM(id) {
+  try {
+    const res = await fetch(`/api/admin/player-of-the-month/${id}`, {
+      method: 'DELETE'
+    });
+    return await res.json();
+  } catch (error) {
+    console.error('Error deleting POTM:', error);
+  }
 }

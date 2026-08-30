@@ -1,124 +1,226 @@
-/* Extends the tokens and components already defined in style.css */
-
-.admin-body { background: var(--white); }
-
-.admin-main {
-  padding: 3rem 1.5rem 5rem;
-  max-width: 900px;
+/* ---------- Admin Styles ---------- */
+.admin-body {
+  background: var(--white);
+  padding-top: 76px;
 }
 
-.admin-panel { margin-bottom: 3rem; }
+.admin-main {
+  padding: 2rem 0 4rem;
+}
+
+.admin-panel {
+  max-width: 900px;
+  margin: 0 auto;
+}
 
 .admin-panel h2 {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.admin-panel h2:first-of-type {
+  margin-top: 0;
 }
 
 .admin-form {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 1.5rem;
-  max-width: 480px;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .admin-form label {
   display: block;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--slate);
-  margin: 0.9rem 0 0.35rem;
+  margin: 0.75rem 0 0.3rem;
 }
 
 .admin-form input,
+.admin-form select,
 .admin-form textarea {
   width: 100%;
-  padding: 0.6rem 0.75rem;
+  padding: 0.6rem 0.8rem;
   border: 1px solid var(--border);
   border-radius: 4px;
-  font-family: inherit;
-  font-size: 0.92rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  background: #fafbfc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-form input:focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255, 106, 61, 0.15);
+}
+
+.admin-form textarea {
   resize: vertical;
 }
 
-.admin-form input:focus-visible,
-.admin-form textarea:focus-visible {
-  outline: 2px solid var(--orange);
-  outline-offset: 1px;
+.admin-form .form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
 }
 
-.admin-form button {
-  margin-top: 1.25rem;
-  margin-right: 0.6rem;
-  border: none;
-  cursor: pointer;
+.admin-form .btn {
+  min-width: 120px;
+  text-align: center;
 }
 
 .btn-ghost-dark {
   background: transparent;
+  color: var(--slate);
   border: 2px solid var(--border);
-  color: var(--navy);
 }
 
-.btn-ghost-dark:hover { border-color: var(--slate); }
+.btn-ghost-dark:hover {
+  border-color: var(--navy);
+  color: var(--navy);
+}
 
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1rem;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
-}
-
-.admin-table th, .admin-table td {
-  text-align: left;
-  padding: 0.7rem 0.9rem;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.86rem;
+  font-size: 0.9rem;
 }
 
 .admin-table th {
+  background: var(--navy);
+  color: #fff;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
-  color: var(--slate);
-  background: #f4f6f8;
+  letter-spacing: 0.06em;
 }
 
-.admin-table tr:last-child td { border-bottom: none; }
+.admin-table td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background: rgba(255, 106, 61, 0.04);
+}
+
+.admin-table .danger {
+  color: #ef4444;
+  border-color: #fca5a5;
+}
+
+.admin-table .danger:hover {
+  background: #fef2f2;
+}
 
 .admin-table button {
-  background: none;
-  border: none;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--white);
   cursor: pointer;
-  color: var(--orange);
-  font-weight: 600;
-  font-size: 0.82rem;
-  margin-right: 0.85rem;
-  padding: 0;
+  font-size: 0.8rem;
+  transition: all 0.15s ease;
 }
 
-.admin-table button.danger { color: #c0392b; }
-.admin-table button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
-
-@media (max-width: 860px) {
-  .admin-main { padding: 2rem 1rem 3rem; }
-  .admin-form { max-width: 100%; padding: 1.25rem; }
-  .admin-table { font-size: 0.82rem; }
+.admin-table button:hover {
+  background: var(--navy);
+  color: #fff;
 }
 
-@media (max-width: 720px) {
-  .admin-main { padding: 1.5rem 0.75rem 2rem; }
-  .admin-form { padding: 1rem; }
-  .admin-panel { margin-bottom: 2rem; }
-  .admin-table { display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .admin-table thead, .admin-table tr { display: table; width: 100%; table-layout: fixed; }
-  .admin-table td, .admin-table th { white-space: nowrap; padding: 0.65rem 0.75rem; }
-  .admin-table th { font-size: 0.7rem; }
+.admin-table button.danger:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+.admin-table .btn-small {
+  padding: 0.15rem 0.6rem;
+  font-size: 0.7rem;
+}
+
+/* Login panel */
+#loginPanel {
+  max-width: 420px;
+  margin: 3rem auto;
+}
+
+#loginPanel h2 {
+  border-bottom: none;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+#loginPanel .admin-form {
+  padding: 2rem;
+}
+
+#loginError {
+  color: #ef4444;
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-main {
+    padding: 1rem 0 3rem;
+  }
+  .admin-form {
+    padding: 1rem;
+  }
+  .admin-table {
+    font-size: 0.8rem;
+  }
+  .admin-table th,
+  .admin-table td {
+    padding: 0.5rem 0.6rem;
+  }
+  .admin-table button {
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  .admin-form .form-actions {
+    flex-direction: column;
+  }
+  .admin-form .btn {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 540px) {
+  .admin-table {
+    font-size: 0.7rem;
+  }
+  .admin-table th,
+  .admin-table td {
+    padding: 0.4rem 0.4rem;
+  }
+  .admin-table button {
+    display: block;
+    margin: 0.15rem 0;
+    width: 100%;
+  }
 }
