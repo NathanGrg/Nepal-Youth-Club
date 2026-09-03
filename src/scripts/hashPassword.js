@@ -1,4 +1,3 @@
-// Run with: npm run hash-password -- yourPasswordHere
 const bcrypt = require('bcryptjs');
 
 const password = process.argv[2];

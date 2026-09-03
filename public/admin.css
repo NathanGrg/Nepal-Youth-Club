@@ -1,4 +1,4 @@
-/* ---------- Admin Styles ---------- */
+
 .admin-body {
   background: var(--white);
   padding-top: 76px;
@@ -160,7 +160,7 @@
   font-size: 0.7rem;
 }
 
-/* Login panel */
+
 #loginPanel {
   max-width: 420px;
   margin: 3rem auto;
@@ -182,7 +182,7 @@
   margin-top: 0.75rem;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .admin-main {
     padding: 1rem 0 3rem;

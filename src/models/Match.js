@@ -35,6 +35,4 @@ matchSchema.virtual('resultBadge').get(function() {
 
 matchSchema.set('toJSON', { virtuals: true });
 matchSchema.set('toObject', { virtuals: true });
-
-// ✅ Only ONE model definition per file
 module.exports = mongoose.model('Match', matchSchema);

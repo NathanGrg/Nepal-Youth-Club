@@ -1,4 +1,3 @@
-// ---------- Mobile nav toggle ----------
 const navToggle = document.getElementById('navToggle');
 const nav = document.getElementById('primaryNav');
 
@@ -7,8 +6,6 @@ if (navToggle && nav) {
     const isOpen = nav.classList.toggle('is-open');
     navToggle.setAttribute('aria-expanded', String(isOpen));
   });
-
-  // Close nav on link click (mobile)
   nav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       nav.classList.remove('is-open');
@@ -16,13 +13,11 @@ if (navToggle && nav) {
     });
   });
 }
-
-// ---------- Player Data (Static Fallback) ----------
 const DEFAULT_PLAYERS = [
   {
     name: "Ramesh Gurung",
     position: "Setter",
-    photoUrl: null, // Use null to show avatar instead
+    photoUrl: null,
     number: 7
   },
   {
@@ -68,8 +63,6 @@ const DEFAULT_PLAYERS = [
     number: 5
   }
 ];
-
-// ---------- Avatar Colors ----------
 const AVATAR_COLORS = [
   'var(--orange)',
   'var(--gold)', 
@@ -80,8 +73,6 @@ const AVATAR_COLORS = [
   '#9b59b6',
   '#842989'
 ];
-
-// ---------- Helper Functions ----------
 function getInitials(name) {
   return name
     .split(' ')
@@ -94,8 +85,6 @@ function getInitials(name) {
 function getRandomColor(index) {
   return AVATAR_COLORS[index % AVATAR_COLORS.length];
 }
-
-// ---------- Render Player Card ----------
 function renderPlayerCard(player, index) {
   const color = getRandomColor(index);
   const hasPhoto = player.photoUrl && player.photoUrl.trim() !== '';
@@ -117,8 +106,6 @@ function renderPlayerCard(player, index) {
     </article>
   `;
 }
-
-// ---------- Load Players (API with static fallback) ----------
 async function loadPlayers() {
   const grid = document.getElementById('playersGrid');
   const empty = document.getElementById('playersEmpty');
@@ -126,7 +113,6 @@ async function loadPlayers() {
   if (!grid) return;
 
   try {
-    // Try to fetch from API
     const res = await fetch('/api/players');
     
     if (res.ok) {
@@ -137,17 +123,12 @@ async function loadPlayers() {
         return;
       }
     }
-    
-    // If API fails or returns empty, use static data
     console.log('Using static player data (API unavailable)');
     grid.innerHTML = DEFAULT_PLAYERS.map(renderPlayerCard).join('');
     
   } catch (err) {
-    // API error — use static data
     console.warn('Could not fetch players from API, using static data:', err);
     grid.innerHTML = DEFAULT_PLAYERS.map(renderPlayerCard).join('');
   }
 }
-
-// ---------- Run on page load ----------
 document.addEventListener('DOMContentLoaded', loadPlayers);

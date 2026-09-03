@@ -3,8 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
-
-// POST /api/auth/login — checks against the single admin account in .env
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 

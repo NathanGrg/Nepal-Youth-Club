@@ -20,7 +20,7 @@
       <p class="section-subtitle">Celebrating our standout performers.</p>
 
       <% if (currentPOTM) { %>
-        <!-- Current Player of the Month -->
+
         <div class="potm-featured">
           <div class="potm-featured-card">
             <div class="potm-image">
@@ -35,21 +35,21 @@
               <h2><%= currentPOTM.player.name %></h2>
               <p class="potm-position"><%= currentPOTM.player.position %> • #<%= currentPOTM.player.number %></p>
               <p class="potm-month"><%= currentPOTM.month %> <%= currentPOTM.year %></p>
-              
+
               <% if (currentPOTM.achievement) { %>
                 <div class="potm-achievement">
                   <h3>Achievement</h3>
                   <p><%= currentPOTM.achievement %></p>
                 </div>
               <% } %>
-              
+
               <% if (currentPOTM.stats) { %>
                 <div class="potm-stats">
                   <h3>Stats</h3>
                   <p><%= currentPOTM.stats %></p>
                 </div>
               <% } %>
-              
+
               <% if (currentPOTM.quote) { %>
                 <blockquote class="potm-quote">
                   "<%= currentPOTM.quote %>"
@@ -63,7 +63,7 @@
         <p class="empty-message">Player of the Month coming soon!</p>
       <% } %>
 
-      <!-- Past Players of the Month -->
+
       <% if (pastPOTM && pastPOTM.length > 0) { %>
         <div class="potm-past">
           <h2>Past Honorees</h2>

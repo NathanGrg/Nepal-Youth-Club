@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const PlayerOfTheMonth = require('../models/PlayerOfTheMonth');
-
-// GET player of the month page (HTML)
 router.get('/', async (req, res) => {
   try {
     const currentPOTM = await PlayerOfTheMonth.findOne({ isFeatured: true })

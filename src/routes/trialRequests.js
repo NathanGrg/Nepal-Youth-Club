@@ -3,8 +3,6 @@ const TrialRequest = require('../models/TrialRequest');
 const requireAdmin = require('../middleware/requireAdmin');
 
 const router = express.Router();
-
-// POST /api/trial-requests — public, this is what the recruit form submits to
 router.post('/', async (req, res) => {
   try {
     await TrialRequest.create(req.body);
@@ -13,8 +11,6 @@ router.post('/', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// GET /api/trial-requests — admin only
 router.get('/', requireAdmin, async (req, res) => {
   try {
     const requests = await TrialRequest.find().sort({ createdAt: -1 });

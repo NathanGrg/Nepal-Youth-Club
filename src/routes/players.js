@@ -3,8 +3,6 @@ const Player = require('../models/Player');
 const requireAdmin = require('../middleware/requireAdmin');
 
 const router = express.Router();
-
-// GET /api/players — public, used by players.html
 router.get('/', async (req, res) => {
   try {
     const players = await Player.find().sort({ createdAt: 1 });
@@ -13,8 +11,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch players' });
   }
 });
-
-// POST /api/players — admin only
 router.post('/', requireAdmin, async (req, res) => {
   try {
     const player = await Player.create(req.body);
@@ -23,8 +19,6 @@ router.post('/', requireAdmin, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// PUT /api/players/:id — admin only
 router.put('/:id', requireAdmin, async (req, res) => {
   try {
     const player = await Player.findByIdAndUpdate(req.params.id, req.body, {
@@ -37,8 +31,6 @@ router.put('/:id', requireAdmin, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// DELETE /api/players/:id — admin only
 router.delete('/:id', requireAdmin, async (req, res) => {
   try {
     const player = await Player.findByIdAndDelete(req.params.id);

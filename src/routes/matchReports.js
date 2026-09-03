@@ -3,15 +3,13 @@ const router = express.Router();
 const MatchReport = require('../models/MatchReport');
 const Match = require('../models/Match');
 const Player = require('../models/Player');
-
-// ---------- GET all match reports ----------
 router.get('/', async (req, res) => {
   try {
     const reports = await MatchReport.find()
       .populate('match')
       .populate('bestPlayer')
       .populate('keyPlayers')
-      .sort({ createdAt: -1 });  // ← newest first
+      .sort({ createdAt: -1 });
 
     res.json(reports);
   } catch (error) {
@@ -22,8 +20,6 @@ router.get('/', async (req, res) => {
     });
   }
 });
-
-// ---------- GET single match report ----------
 router.get('/:id', async (req, res) => {
   try {
     const report = await MatchReport.findById(req.params.id)

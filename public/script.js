@@ -1,6 +1,3 @@
-// ============================================
-// 1. MOBILE NAV TOGGLE (with smooth animation)
-// ============================================
 const navToggle = document.getElementById('navToggle');
 const primaryNav = document.getElementById('primaryNav');
 
@@ -10,8 +7,6 @@ if (navToggle && primaryNav) {
         navToggle.classList.toggle('is-active');
         navToggle.setAttribute('aria-expanded', String(isOpen));
     });
-
-    // Close nav when clicking a link (mobile)
     primaryNav.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             primaryNav.classList.remove('is-open');
@@ -20,10 +15,6 @@ if (navToggle && primaryNav) {
         });
     });
 }
-
-// ============================================
-// 2. ACTIVE NAV LINK (highlight current page)
-// ============================================
 document.querySelectorAll('.nav a').forEach(link => {
     const href = link.getAttribute('href');
     const currentPath = window.location.pathname;
@@ -34,10 +25,6 @@ document.querySelectorAll('.nav a').forEach(link => {
         link.classList.add('active');
     }
 });
-
-// ============================================
-// 3. SMOOTH SCROLL FOR ANCHOR LINKS
-// ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         const targetId = this.getAttribute('href');
@@ -50,16 +37,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: 'smooth',
                 block: 'start'
             });
-            
-            // Update URL without jumping
             history.pushState(null, null, targetId);
         }
     });
 });
-
-// ============================================
-// 4. CAROUSEL (with smooth transitions, autoplay, touch support)
-// ============================================
 class Carousel {
     constructor(container) {
         this.container = container;
@@ -83,7 +64,6 @@ class Carousel {
     }
     
     init() {
-        // Set up slides (position: absolute with left: 0)
         this.slides.forEach((slide, i) => {
             slide.style.position = 'absolute';
             slide.style.top = '0';
@@ -93,8 +73,6 @@ class Carousel {
             slide.style.opacity = i === 0 ? '1' : '0';
             slide.style.transition = 'opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             slide.style.pointerEvents = i === 0 ? 'auto' : 'none';
-            
-            // Add caption overlay if not present
             if (!slide.querySelector('.slide-caption') && slide.dataset.caption) {
                 const caption = document.createElement('div');
                 caption.className = 'slide-caption';
@@ -102,29 +80,17 @@ class Carousel {
                 slide.appendChild(caption);
             }
         });
-        
-        // Set track height to match first slide
         this.updateTrackHeight();
-        
-        // Create dots
         this.createDots();
-        
-        // Event listeners
         if (this.prevBtn) this.prevBtn.addEventListener('click', () => { this.prev(); this.resetTimer(); });
         if (this.nextBtn) this.nextBtn.addEventListener('click', () => { this.next(); this.resetTimer(); });
-        
-        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (!this.container.closest('.carousel')) return;
             if (e.key === 'ArrowLeft') { this.prev(); this.resetTimer(); }
             if (e.key === 'ArrowRight') { this.next(); this.resetTimer(); }
         });
-        
-        // Pause on hover
         this.container.addEventListener('mouseenter', () => this.pause());
         this.container.addEventListener('mouseleave', () => this.start());
-        
-        // Touch support
         this.track.addEventListener('touchstart', (e) => {
             this.touchStartX = e.changedTouches[0].screenX;
             this.isDragging = true;
@@ -146,8 +112,6 @@ class Carousel {
             this.isDragging = false;
             this.start();
         }, { passive: true });
-        
-        // Start autoplay
         this.start();
     }
     
@@ -160,7 +124,6 @@ class Carousel {
                 img.addEventListener('load', () => {
                     this.track.style.height = img.offsetHeight + 'px';
                 });
-                // Fallback if already loaded
                 if (img.complete) {
                     this.track.style.height = img.offsetHeight + 'px';
                 }
@@ -196,13 +159,9 @@ class Carousel {
     goTo(index) {
         if (this.isTransitioning || index === this.currentIndex) return;
         this.isTransitioning = true;
-        
-        // Fade out current
         const currentSlide = this.slides[this.currentIndex];
         currentSlide.style.opacity = '0';
         currentSlide.style.pointerEvents = 'none';
-        
-        // Fade in new
         const newSlide = this.slides[index];
         newSlide.style.opacity = '1';
         newSlide.style.pointerEvents = 'auto';
@@ -243,21 +202,14 @@ class Carousel {
         this.start();
     }
 }
-
-// Initialize carousel
 const carouselContainer = document.querySelector('.carousel-inner');
 if (carouselContainer) {
     new Carousel(carouselContainer);
 }
-
-// ============================================
-// 5. RECRUITMENT FORM (with validation & feedback)
-// ============================================
 const recruitForm = document.getElementById('recruitForm');
 const recruitNote = document.getElementById('recruitNote');
 
 if (recruitForm) {
-    // Real-time validation
     const inputs = recruitForm.querySelectorAll('input, select');
     inputs.forEach(input => {
         input.addEventListener('blur', () => {
@@ -285,8 +237,6 @@ if (recruitForm) {
         const name = document.getElementById('name');
         const contact = document.getElementById('contact');
         const position = document.getElementById('position');
-        
-        // Validate all required fields
         let isValid = true;
         [name, contact].forEach(field => {
             field.classList.remove('error', 'success');
@@ -303,8 +253,6 @@ if (recruitForm) {
             recruitNote.className = 'form-note error';
             return;
         }
-        
-        // Disable button during submission
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
@@ -320,7 +268,6 @@ if (recruitForm) {
         };
         
         try {
-            // Try API first, fallback to localStorage for demo
             let success = false;
             
             try {
@@ -338,8 +285,6 @@ if (recruitForm) {
             } catch (apiError) {
                 console.warn('API unavailable, saving locally:', apiError);
             }
-            
-            // Fallback: save to localStorage
             if (!success) {
                 const requests = JSON.parse(localStorage.getItem('trialRequests') || '[]');
                 requests.push({
@@ -354,13 +299,9 @@ if (recruitForm) {
                 recruitNote.textContent = "✅ Your request has been submitted. We'll be in touch!";
                 recruitNote.className = 'form-note success';
                 recruitForm.reset();
-                
-                // Remove success/error classes
                 inputs.forEach(input => {
                     input.classList.remove('success', 'error');
                 });
-                
-                // Reset button
                 if (submitBtn) {
                     submitBtn.textContent = 'Submitted!';
                     setTimeout(() => {
@@ -382,10 +323,6 @@ if (recruitForm) {
         }
     });
 }
-
-// ============================================
-// 6. SCROLL ANIMATIONS (3D card effect)
-// ============================================
 function initScrollAnimations() {
     const cards = document.querySelectorAll('.event-card, .position-list li');
     if (!cards.length) return;
@@ -394,7 +331,6 @@ function initScrollAnimations() {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
                 const card = entry.target;
-                // Add a data-index for stagger effect
                 if (!card.dataset.index) {
                     card.dataset.index = index;
                 }
@@ -402,8 +338,6 @@ function initScrollAnimations() {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(30px)';
                 card.style.transition = `all 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${parseInt(card.dataset.index) * 80}ms`;
-                
-                // Trigger animation
                 requestAnimationFrame(() => {
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
@@ -419,25 +353,15 @@ function initScrollAnimations() {
     
     cards.forEach((card, index) => {
         card.dataset.index = index;
-        // Set initial state
         card.style.opacity = '0';
         card.style.transform = 'translateY(30px)';
         observer.observe(card);
     });
 }
-
-// Run scroll animations on load
 document.addEventListener('DOMContentLoaded', () => {
-    // Wait a bit for content to render
     setTimeout(initScrollAnimations, 300);
 });
-
-// Also run when images load (for carousel height)
 window.addEventListener('load', initScrollAnimations);
-
-// ============================================
-// 7. LOAD EVENTS FROM API
-// ============================================
 async function loadEvents() {
     const eventGrid = document.querySelector('.event-grid');
     if (!eventGrid) return;
@@ -450,11 +374,7 @@ async function loadEvents() {
         
         const events = await response.json();
         if (events.length === 0) return;
-        
-        // Clear existing events
         eventGrid.innerHTML = '';
-        
-        // Add events from database
         events.forEach((event, index) => {
             const date = new Date(event.date);
             const day = String(date.getDate()).padStart(2, '0');
@@ -480,22 +400,13 @@ async function loadEvents() {
             `;
             eventGrid.appendChild(eventCard);
         });
-        
-        // Re-initialize scroll animations for new cards
         setTimeout(initScrollAnimations, 200);
         
     } catch (error) {
         console.warn('Could not load events from API:', error);
-        // Keep the static events (already in HTML)
     }
 }
-
-// Load events when page loads
 document.addEventListener('DOMContentLoaded', loadEvents);
-
-// ============================================
-// 8. HERO STATS COUNTER ANIMATION
-// ============================================
 function animateStats() {
     const stats = document.querySelectorAll('.stat-strip dt');
     if (!stats.length) return;
@@ -531,8 +442,4 @@ function animateStats() {
 }
 
 document.addEventListener('DOMContentLoaded', animateStats);
-
-// ============================================
-// 9. CONSOLE LOG (optional - remove in production)
-// ============================================
 console.log('🏐 Nepal Youth Club — site loaded successfully!');

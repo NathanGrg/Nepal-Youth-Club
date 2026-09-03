@@ -23,7 +23,7 @@ const playerSchema = new mongoose.Schema(
     },
     height: {
       type: String,
-      default: null // e.g., "5'11\""
+      default: null
     },
     age: {
       type: Number,
@@ -31,7 +31,7 @@ const playerSchema = new mongoose.Schema(
     },
     experience: {
       type: String,
-      default: null // e.g., "5 years"
+      default: null
     },
     bio: {
       type: String,
@@ -51,18 +51,12 @@ const playerSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-// Virtual: full name with number
 playerSchema.virtual('displayName').get(function() {
   return `#${this.number} ${this.name}`;
 });
-
-// Virtual: short bio for cards
 playerSchema.virtual('shortBio').get(function() {
   return `${this.position} • ${this.experience || 'New player'}`;
 });
-
-// Ensure virtuals are included in JSON output
 playerSchema.set('toJSON', { virtuals: true });
 playerSchema.set('toObject', { virtuals: true });
 

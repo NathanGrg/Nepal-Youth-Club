@@ -18,7 +18,6 @@ function showDashboard() {
   loadRequests();
   loadMatchReports();
   loadPOTM();
-  // start polling for new requests every 10s
   if (!requestsIntervalId) requestsIntervalId = setInterval(loadRequests, 10000);
 }
 
@@ -30,8 +29,6 @@ function showLogin() {
 }
 
 if (token) showDashboard(); else showLogin();
-
-// Broadcast channel for cross‑tab notifications
 if ('BroadcastChannel' in window) {
   const bc = new BroadcastChannel('nyc_channel');
   bc.addEventListener('message', (ev) => {
@@ -40,8 +37,6 @@ if ('BroadcastChannel' in window) {
 } else {
   window.addEventListener('nyc:new-trial-request', loadRequests);
 }
-
-// ---------- Login / logout ----------
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const username = document.getElementById('username').value;
@@ -70,8 +65,6 @@ logoutBtn.addEventListener('click', () => {
   token = null;
   showLogin();
 });
-
-// Wraps fetch with admin token
 async function authedFetch(url, options = {}) {
   options.headers = {
     ...(options.headers || {}),
@@ -85,8 +78,6 @@ async function authedFetch(url, options = {}) {
   }
   return res;
 }
-
-// ---------- EVENTS ----------
 async function loadEvents() {
   const res = await fetch('/api/events');
   const events = await res.json();
@@ -166,8 +157,6 @@ document.getElementById('eventForm').addEventListener('submit', async (e) => {
     alert('Could not save event.');
   }
 });
-
-// ---------- PLAYERS ----------
 async function loadPlayers() {
   const res = await fetch('/api/players');
   const players = await res.json();
@@ -245,8 +234,6 @@ document.getElementById('playerForm').addEventListener('submit', async (e) => {
     alert('Could not save player.');
   }
 });
-
-// ---------- TRIAL REQUESTS (read-only) ----------
 async function loadRequests() {
   const res = await authedFetch('/api/trial-requests');
   const requests = await res.json();
@@ -264,10 +251,6 @@ async function loadRequests() {
     )
     .join('');
 }
-
-// ============================================================
-//  MATCH REPORTS
-// ============================================================
 async function loadMatchReports() {
   const res = await authedFetch('/api/admin/match-reports');
   const reports = await res.json();
@@ -353,10 +336,6 @@ document.getElementById('reportForm')?.addEventListener('submit', async (e) => {
     alert('Could not save match report.');
   }
 });
-
-// ============================================================
-//  PLAYER OF THE MONTH
-// ============================================================
 async function loadPOTM() {
   const res = await authedFetch('/api/admin/player-of-the-month');
   const potmList = await res.json();
@@ -446,8 +425,6 @@ document.getElementById('potmForm')?.addEventListener('submit', async (e) => {
     alert('Could not save Player of the Month.');
   }
 });
-
-// ---------- Helper: populate dropdowns (called from admin.html) ----------
 async function populateReportDropdowns() {
   try {
     const [matchesRes, playersRes] = await Promise.all([
@@ -478,20 +455,14 @@ async function populateReportDropdowns() {
     console.error('Error populating dropdowns:', error);
   }
 }
-
-// Call this after login or on page load
 if (token) {
   populateReportDropdowns();
 }
-// ============================================
-// MATCH REPORT MANAGEMENT
-// ============================================
 
 async function loadMatchReports() {
   try {
     const res = await fetch('/api/admin/match-reports');
     const reports = await res.json();
-    // Render to admin table
     renderReportsTable(reports);
   } catch (error) {
     console.error('Error loading match reports:', error);
@@ -534,10 +505,6 @@ async function deleteMatchReport(id) {
     console.error('Error deleting match report:', error);
   }
 }
-
-// ============================================
-// PLAYER OF THE MONTH MANAGEMENT
-// ============================================
 
 async function loadPOTM() {
   try {

@@ -33,8 +33,6 @@ const playerOfTheMonthSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-
-// Ensure only one featured per month/year
 playerOfTheMonthSchema.index({ month: 1, year: 1, player: 1 }, { unique: true });
 
 module.exports = mongoose.model('PlayerOfTheMonth', playerOfTheMonthSchema);

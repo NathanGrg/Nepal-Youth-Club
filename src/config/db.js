@@ -9,7 +9,7 @@ module.exports = async function connectDB() {
     await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
-      family: 4, // Force IPv4
+      family: 4,
       retryWrites: true,
       w: 'majority'
     });
